@@ -29,5 +29,7 @@ shell_command:
 ```
 Don't forget to restart HA now. Then create an automation using the code in automation.yaml. That's it: Connect your car and have fun...
 ## The Open Point
-As an extra messure, it would be good to check whether the connected car is really at home and connected. This would avoid errors if evcc detects the wrong car (which happened once to me so far). Since there is currently no stable BMW integration in Home Assistant, I have not yet implemented this.
+As an extra measure, it would be good to check whether the connected car is really at home and connected. This would avoid errors if evcc detects the wrong car (which happened once to me so far). Since there is currently no stable BMW integration in Home Assistant, I have not yet implemented this.
+For the time being, I have added a 1 minute delay in my automation. I have another automation which just sends the detected car to my phone so I have 1 minute to intervene if something is wrong. Maybe I will buy some cheap bluetooth beacon to use as device trackers for the cars.
+
 
