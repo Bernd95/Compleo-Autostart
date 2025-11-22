@@ -1,0 +1,60 @@
+alias: Laden automatisch mit RFID starten
+description: >-
+  Abhängig vom angeschlossenen Fahrzeug (wie von evcc ermittelt) wird das
+  richtige Python-Kommando aufgerufen, das in compleo_start.py definiert ist und
+  das die Wallbox mit der zugehörigen RFID startet. Die Fahrzeugkennung aus evcc
+  ist etwas wie db:3 oder db:6
+triggers:
+  - trigger: state
+    entity_id:
+      - select.evcc_bmw_ebox_vehicle_name
+    to:
+      - xxx_FAHRZEUGKENNUNG_PRIVAT
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  - trigger: state
+    entity_id:
+      - select.evcc_bmw_ebox_vehicle_name
+    to:
+      - xxx_FAHRZEUGKENNUNG_BUSINESS
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+conditions:
+  - condition: state
+    entity_id: binary_sensor.evcc_bmw_ebox_charging
+    state: "off"
+actions:
+  - choose:
+      - conditions:
+          - condition: state
+            entity_id: select.evcc_bmw_ebox_vehicle_name
+            state: xxx_FAHRZEUGKENNUNG_PRIVAT
+        sequence:
+          - action: shell_command.compleo_start_private
+          - action: notify.xxx_mobile_app_ON_YOUR_PHONE
+            metadata: {}
+            data:
+              message: >-
+                Der automatische Ladevorgang für das Fahrzeug {{
+                state_attr('select.evcc_bmw_ebox_vehicle_name', 'vehicle').name
+                }} / {{ states('select.evcc_bmw_ebox_vehicle_name') }} wurde
+                gestartet (privat).
+      - conditions:
+          - condition: state
+            entity_id: select.evcc_bmw_ebox_vehicle_name
+            state: xxx_FAHRZEUGKENNUNG_BUSINESS
+        sequence:
+          - action: shell_command.compleo_start_business
+          - action: notify.xxx_mobile_app_ON_YOUR_PHONE
+            metadata: {}
+            data:
+              message: >-
+                Der automatische Ladevorgang für das Fahrzeug {{
+                state_attr('select.evcc_bmw_ebox_vehicle_name', 'vehicle').name
+                }} / {{ states('select.evcc_bmw_ebox_vehicle_name') }} wurde
+                gestartet (beruflich).
+mode: single
