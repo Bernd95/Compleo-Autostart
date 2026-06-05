@@ -23,7 +23,7 @@ And in automation.yaml:
 - `notify.xxx_mobile_app_ON_YOUR_PHONE` has to be replaced by the correct HA entity for your cell phone. This might be something like `notify.mobile_app_Toms_iPhone`.
 - Replace the condition concering the bluetooth beacon with the sensor you are using. Or remove it.
 
-Now you have to copy the file `compleo_start.py` to the directory config ➔ scripts on your HA server (so the scripts directory is in the same directory as the configuration.yaml) and you have to make it executable with `chmod +x ...`. In the file configuration.yaml, add the following lines:
+Now you have to copy the file `compleo_start.py` to the directory config ➔ scripts on your HA server (so the scripts directory is in the same directory as the configuration.yaml) and you have to make it executable with `chmod +x ...`. You can use the HA Apps `Studio Code Server` and `Terminal & SSH` to do this. In the file configuration.yaml, add the following lines:
 ```
 shell_command:
   compleo_start_private: "python3 /config/scripts/compleo_start.py private >> /config/compleo.log 2>&1"
