@@ -1,6 +1,6 @@
 # Compleo Autostart
 ## The Problem
-I use the wallbox Compleo ebox Professional with firmware v2.5.1. Depending on which of my RFID cards I show when connecting a car, the charging session is considered as private or business. But I want to avoid showing an RFID card each time I connect a car. Instead, the connected car should be detected automatically and the charging session should be considered accordingly.
+I use the wallbox Compleo ebox Professional with firmware v3.0.5 (earlier with v2.5.1). Depending on which of my RFID cards I show when connecting a car, the charging session is considered as private or business. But I want to avoid showing an RFID card each time I connect a car. Instead, the connected car should be detected automatically and the charging session should be considered accordingly.
 ## The Solution
 Inspired by the solution [here](https://github.com/cs33lm/node-red-innogy-http-request) and with a lot of help from AI chatbots, I came up with a solution using [evcc](https://evcc.io/), [Home Assistant](https://www.home-assistant.io/) and the [Home Assistant Integration: evcc - Solar Charging (unofficial)](https://github.com/marq24/ha-evcc). The basic idea is as follows:
 1. When the car is connected to my wallbox, evcc detects the car (in my case using the BMW Cardata backend).
@@ -12,7 +12,7 @@ Inspired by the solution [here](https://github.com/cs33lm/node-red-innogy-http-r
 1. The car starts charging.
 1. A message is sent to my cell phone.
 ## The Documentation
-Download the files `compleo_start.py` and `automation.yaml`. First, you have to replace some placeholders by your passwords and IDs. Let's start with `compleo_start.py`:
+Download the files `compleo_start.py` (for firmware version v2.5.1 use `compleo_start-251.py`and rename it to `compleo_start.py`) and `automation.yaml`. First, you have to replace some placeholders by your passwords and IDs. Let's start with `compleo_start.py`:
 - `xxx_YOUR_PRIVATE_RFID` has to be replaced by the internal ID of your private RFID card. To find this ID, start a private charging session. Then open the web interface of the wallbox, go to LDP1 ➔ Session and search for `Contract ID`. This combination of letters and numbers is what you are looking for.
 - `xxx_YOUR_BUSINESS_RFID` has to be replaced by the internal ID of your business RFID card.
 - `xxx_YOUR_ADMIN_PASSWORD` has to be replaced by the password to access the wallbox. It is usually the PUK written on the back of the manual.
@@ -31,5 +31,5 @@ shell_command:
 ```
 Don't forget to restart HA now. Then create an automation using the code in `automation.yaml`. That's it: Connect your car and have fun...
 ## The Open Point
-As an extra measure, it would be good to check whether the connected car is really at home and connected. This would avoid errors if evcc detects the wrong car (which happened once to me so far). Since there is currently no stable BMW integration in Home Assistant, I have not yet implemented this.
-For the time being, I have added a 1 minute delay in my automation. I have another automation which just sends the detected car to my phone so I have 1 minute to intervene if something is wrong. For the time being, I added the check using the bluetooth beacon - not perfect but better than nothing.
+As an extra measure, it would be good to check whether the connected car is really at home and connected. This would avoid errors if evcc detects the wrong car (which rarely happens). Since there is currently no stable BMW integration in Home Assistant, I have not yet implemented this.
+For the time being, I have added a 1 minute delay in my automation. I have another automation which just sends the detected car to my phone so I have 1 minute to intervene if something is wrong. Also, I added the check using the bluetooth beacon - not perfect but better than nothing.
